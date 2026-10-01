@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Votre Panier - Enjoy</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Fond animé */
+.background-animation {
+    position: fixed;  
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    animation: float 20s infinite ease-in-out;
+}
+
+.shape1 { width: 300px; height: 300px; background: #fff; top: 10%; left: 10%; animation-delay: 0s; }
+.shape2 { width: 200px; height: 200px; background: #ffd700; top: 60%; right: 15%; animation-delay: 3s; }
+.shape3 { width: 150px; height: 150px; background: #ff6b6b; bottom: 20%; left: 20%; animation-delay: 6s; }
+.shape4 { width: 250px; height: 250px; background: #4ecdc4; top: 40%; right: 30%; animation-delay: 9s; }
+
+@keyframes float {
+    0%,100% { transform: translate(0,0) rotate(0deg); }
+    25% { transform: translate(30px,-30px) rotate(90deg); }
+    50% { transform: translate(-20px,20px) rotate(180deg); }
+    75% { transform: translate(40px,10px) rotate(270deg); }
+}
+
+/* Navigation */
+nav {
+    margin: 30px auto 20px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    padding: 10px 20px;
+    border-radius: 25px;
+    max-width: 800px;
+    display: flex;
+    justify-content: center;  
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    position: relative;
+    flex-wrap: wrap;
+}
+
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    color: #667eea;
+    transform: translateY(-2px);
+}
+
+/* Conteneur principal */
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    animation: fadeInUp 0.8s ease-out;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+}
+
+/* Panier vide */
+.panier-vide {
+    text-align: center;
+    padding: 60px 40px;
+    color: #999;
+}
+
+.panier-vide h3 {
+    font-size: 1.8em;
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+/* Item panier */
+.item-panier {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.item-panier:hover {
+    transform: translateX(5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.item-details {
+    flex: 1;
+}
+
+.item-details h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 1.3em;
+}
+
+.item-details p {
+    margin: 0;
+    color: #666;
+    font-size: 1em;
+}
+
+.item-prix {
+    text-align: right;
+    min-width: 120px;
+}
+
+.item-prix .prix-unitaire {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.item-prix .prix-total {
+    font-weight: bold;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.3em;
+}
+
+.quantite {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: bold;
+}
+
+/* Résumé */
+.resume {
+    background: rgba(245, 245, 245, 0.8);
+    padding: 30px;
+    margin-top: 30px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.resume-ligne {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    color: #555;
+    font-size: 1.1em;
+}
+
+.resume-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0;
+    margin-top: 15px;
+    border-top: 3px solid #667eea;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Boutons */
+.btn-valider {
+    display: block;
+    width: 100%;
+    padding: 18px;
+    margin-top: 25px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 1.2em;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-valider:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+}
+
+.btn-retour {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(81, 207, 102, 0.3);
+}
+
+.btn-retour:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(81, 207, 102, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    nav {
+        padding: 8px;
+    }
+    
+    .container {
+        padding: 25px;
+        margin: 20px;
+    }
+    
+    h2 {
+        font-size: 1.8em;
+    }
+    
+    .item-panier {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .item-prix {
+        text-align: center;
+    }
+    
+    .resume-total {
+        font-size: 1.2em;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- Fond animé -->
+<div class="background-animation">
+    <div class="floating-shape shape1"></div>
+    <div class="floating-shape shape2"></div>
+    <div class="floating-shape shape3"></div>
+    <div class="floating-shape shape4"></div>
+</div>
+
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+    <!-- Navigation -->
+    <nav>
+        <a href="{{ url_for('accueil') }}">Accueil</a>
+        <a href="{{ url_for('recherche') }}">Recherche</a>
+        {% if session.get('id_client') %}
+        <a href="{{ url_for('profilpersonnel') }}">Mon profil</a>
+        {% else %}
+        <a href="{{ url_for('connexion') }}">Espace client</a>
+        {% endif %}
+        {% if session.get('matricule') %}
+        <a href="{{ url_for('profilprofessionnel') }}">Profil livreur</a>
+        {% else %}
+        <a href="{{ url_for('connexionprive') }}">Espace livreur</a>
+        {% endif %}
+        <a href="commentaire_verifie">Commentaires vérifiés</a>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="container">
+        <h2>🛒 Votre Panier</h2>
+
+        {% if panier and panier|length > 0 %}
+            
+            {% for id_plat, item in panier.items() %}
+            <div class="item-panier">
+                <div class="item-details">
+                    <h3>{{ item.nom }}</h3>
+                    <p>Quantité : <span class="quantite">{{ item.quantite }}</span></p>
+                </div>
+                <div class="item-prix">
+                    <div class="prix-unitaire">{{ item.prix }} € / unité</div>
+                    <div class="prix-total">{{ item.prix_quantite }} €</div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="resume">
+                <div class="resume-ligne">
+                    <span>Sous-total articles</span>
+                    <span>{{ prix_total }} €</span>
+                </div>
+                <div class="resume-ligne">
+                    <span>Frais de livraison</span>
+                    <span>{{ frais }} €</span>
+                </div>
+                <div class="resume-total">
+                    <span>Total à payer</span>
+                    <span>{{ prix_total|float + frais|float }} €</span>
+                </div>
+
+                <form action="{{ url_for('confirmer_commande') }}" method="POST">
+                    <button type="submit" class="btn-valider">✅ Valider la commande</button>
+                </form>
+            </div>
+
+        {% else %}
+            <div class="panier-vide">
+                <h3>🛒 Votre panier est vide</h3>
+                <p>Ajoutez des plats depuis la page des restaurants</p>
+            </div>
+        {% endif %}
+
+        <a href="{{ url_for('pagederestaurant') }}" class="btn-retour">
+            ← Continuer mes achats
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

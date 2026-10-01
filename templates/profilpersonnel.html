@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Client - Enjoy</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Fond animé */
+.background-animation {
+    position: fixed;  
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    animation: float 20s infinite ease-in-out;
+}
+
+.shape1 { width: 300px; height: 300px; background: #fff; top: 10%; left: 10%; animation-delay: 0s; }
+.shape2 { width: 200px; height: 200px; background: #ffd700; top: 60%; right: 15%; animation-delay: 3s; }
+.shape3 { width: 150px; height: 150px; background: #ff6b6b; bottom: 20%; left: 20%; animation-delay: 6s; }
+.shape4 { width: 250px; height: 250px; background: #4ecdc4; top: 40%; right: 30%; animation-delay: 9s; }
+
+@keyframes float {
+    0%,100% { transform: translate(0,0) rotate(0deg); }
+    25% { transform: translate(30px,-30px) rotate(90deg); }
+    50% { transform: translate(-20px,20px) rotate(180deg); }
+    75% { transform: translate(40px,10px) rotate(270deg); }
+}
+
+/* Navigation */
+nav {
+    margin: 30px auto 20px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    padding: 10px 20px;
+    border-radius: 25px;
+    max-width: 800px;
+    display: flex;
+    justify-content: center;  
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    position: relative;  
+}
+
+nav a, nav button {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 0.9em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+nav a:last-child {
+    position: absolute;
+    right: 20px;
+}
+nav a:hover, nav button:hover {
+    color: #667eea;
+    transform: translateY(-2px);
+}
+
+/* Conteneur principal */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* En-tête du profil */
+.profile-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    margin-bottom: 30px;
+    text-align: center;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.profile-header h1 {
+    color: #333;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.points {
+    display: inline-block;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #333;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-size: 1.3em;
+    font-weight: bold;
+    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+}
+
+/* Section */
+.section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 30px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    margin-bottom: 30px;
+    animation: fadeInUp 1s ease-out;
+}
+
+.section h2 {
+    color: #333;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Messages flash */
+.alert {
+    padding: 15px 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 2px solid #c3e6cb;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    color: #721c24;
+    border: 2px solid #f5c6cb;
+}
+
+/* Tableau */
+.table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-weight: 600;
+}
+
+td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+    background: #f8f9fa;
+}
+
+/* Badge statut */
+.status-badge {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.status-en_attente {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-finalisee {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-en_livraison {
+    background: #cfe2ff;
+    color: #084298;
+}
+
+.status-annulee {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Formulaire de parrainage */
+.parrainage-form {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.parrainage-form input[type="email"] {
+    flex: 1;
+    min-width: 250px;
+    padding: 15px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 15px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.parrainage-form input[type="email"]:focus {
+    border-color: #667eea;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+/* Boutons */
+button, .btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: white;
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
+    color: white;
+    box-shadow: 0 5px 15px rgba(81, 207, 102, 0.3);
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(81, 207, 102, 0.4);
+}
+
+/* Formulaire de notation */
+.note-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.note-form input[type="number"] {
+    width: 70px;
+    padding: 8px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Actions footer */
+.actions-footer {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    nav {
+        flex-wrap: wrap;
+        padding: 8px;
+    }
+    
+    .profile-header h1 {
+        font-size: 1.8em;
+    }
+    
+    .section {
+        padding: 20px;
+    }
+    
+    table {
+        font-size: 0.85em;
+    }
+    
+    th, td {
+        padding: 10px 5px;
+    }
+    
+    .parrainage-form {
+        flex-direction: column;
+    }
+    
+    .parrainage-form input[type="email"] {
+        width: 100%;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- Fond animé -->
+<div class="background-animation">
+    <div class="floating-shape shape1"></div>
+    <div class="floating-shape shape2"></div>
+    <div class="floating-shape shape3"></div>
+    <div class="floating-shape shape4"></div>
+</div>
+
+<div class="container">
+    <!-- Navigation -->
+    <nav>
+        <a href="accueil">Accueil</a>
+        <a href="recherche">Recherche</a>
+        <a href="profilpersonnel">Mon profil</a>
+        <a href="{{ url_for('deconnexion') }}">Se déconnecter</a>
+        
+    </nav>
+
+    <!-- En-tête du profil -->
+    <div class="profile-header">
+        <h1>Mon profil</h1>
+        <div class="points">{{ points }} points de fidélité</div>
+    </div>
+
+    <!-- Historique des commandes -->
+    <div class="section">
+        <h2>Historique des commandes</h2>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>N° Commande</th>
+                        <th>Date</th>
+                        <th>Restaurant</th>
+                        <th>Total (€)</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in commandes %}
+                    <tr>
+                        <td><strong>#{{ c[0] }}</strong></td>
+                        <td>{{ c[1] }}</td>
+                        <td>{{ c[2] }}</td>
+                        <td><strong>{{ c[4] }} €</strong></td>
+                        <td>
+                            <span class="status-badge status-{{ c[3] }}">
+                                {{ c[3].replace('_', ' ').title() }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if c[3] == 'en_attente' %}
+                            <form method="POST" action="/annuler_commande" style="display:inline;">
+                                <input type="hidden" name="numCommande" value="{{ c[0] }}">
+                                <button type="submit" class="btn-danger">Annuler</button>
+                            </form>
+                            {% elif c[3] == 'finalisee' %}
+                            <form method="POST" action="/noter_commande" class="note-form">
+                                <input type="hidden" name="numCommande" value="{{ c[0] }}">
+                                <input type="number" name="note" min="0" max="5" step="0.5" placeholder="Note" required>
+                                <button type="submit" class="btn-success">Noter</button>
+                            </form>
+                            {% else %}
+                            <span style="color: #999;">-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Parrainage -->
+    <div class="section">
+        <h2>Parrainer un nouvel utilisateur</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST" action="/parrainer" class="parrainage-form">
+            <input type="email" name="email" placeholder="Email du filleul" required>
+            <button type="submit" class="btn-primary">Parrainer</button>
+        </form>
+    </div>
+
+
+</div>
+
+</body>
+</html>
